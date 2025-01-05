@@ -67,7 +67,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
     <motion.button
       layout
       onClick={() => setSelected(title)}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors ${selected === title ? "bg-indigo-100 text-indigo-800" : "text-white hover:bg-slate-100 hover:text-slate-800"}`}
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors ${selected === title ? "text-indigo-800" : "text-white hover:bg-slate-100 hover:text-slate-800"}`}
     >
       <motion.div
         layout
@@ -108,7 +108,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
 const TitleSection = ({ open }) => {
   return (
     <div className="mb-3 border-b border-slate-300 pb-3">
-      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors hover:bg-slate-100">
+      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors">
         <div className="flex items-center gap-2">
           <Logo />
           {open && (
@@ -128,7 +128,6 @@ const TitleSection = ({ open }) => {
 };
 
 const Logo = () => {
-  // Temp logo from https://logoipsum.com/
   return (
     <motion.div
       layout
