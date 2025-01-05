@@ -1,0 +1,29 @@
+/* From Uiverse.io by zjssun */ 
+.button {
+    position: relative;
+    padding: 5px 22px;
+    border-radius: 6px;
+    border: none;
+    color: #554f4f;
+    cursor: pointer;
+    background-color: #fff;
+    transition: all 0.2s ease;
+  }
+  
+  .button:active {
+    transform: scale(0.96);
+  }
+  
+  .button:before,
+  .button:after {
+    position: absolute;
+    content: "";
+    width: 150%;
+    left: 50%;
+    height: 100%;
+    transform: translateX(-50%);
+    z-index: -1000;
+    background-repeat: no-repeat;
+  }
+  
+ 
