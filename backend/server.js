@@ -1,70 +1,68 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import cors from "cors";
-import bodyParser from "body-parser";
-import { LangflowClient } from "./src/services/langflowClient.js";
+import dotenv from "dotenv";
+dotenv.config();
+import axios from "axios";
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
   },
 });
 
-const PORT = 3000;
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-// LangflowClient configuration
-const BASE_URL = "https://api.langflow.astra.datastax.com";
-const APPLICATION_TOKEN = "AstraCS:rQnnpwOhKGghZkuGGveaKghC:52825a51402a617c0e75723481cadec193ba6ff16f512d1cb9e9402e2a887afc";
-const langflowClient = new LangflowClient(BASE_URL, APPLICATION_TOKEN);
+const LANGFLOW_API_URL = process.env.LANGFLOW_API_URL;
+const APPLICATION_TOKEN = process.env.APPLICATION_TOKEN;
 
 // Socket.IO connection
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  console.log("A user connected:", socket.id);
 
-  // Handle incoming chat messages
-  socket.on("chat-message", async (data) => {
-    console.log(data)
-    const { inputValue } = data;
+  // Listen for a "sendMessage" event from the client
+  socket.on("sendMessage", async (data) => {
     try {
-      const response = await langflowClient.runFlow(
-        "f049726b-0563-4f65-967c-c13a84e2f8c8",
-        "37c06c22-02c2-4d97-af46-1cba5d3b7b40",
-        inputValue,
-        "chat",
-        "chat",
-        {
+      const payload = {
+        input_value: data.message, // Message from the client
+        output_type: "chat",
+        input_type: "chat",
+        tweaks: {
           "ChatInput-4wzY1": {},
           "AstraDBToolComponent-gN1Sm": {},
           "ParseData-K6KIc": {},
           "Prompt-2H5ro": {},
           "ChatOutput-baAia": {},
-          "GoogleGenerativeAIModel-aUBSi": {}
+          "GoogleGenerativeAIModel-aUBSi": {},
         },
-        true,
-        (data) => console.log("Received:", data.chunk),
-        (message) => console.log("Stream Closed:", message),
-        (error) => console.log("Stream Error:", error)
-      );
-      socket.emit("chat-response", response);
+      };
+
+      const response = await axios.post(LANGFLOW_API_URL, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${APPLICATION_TOKEN}`,
+        },
+      });
+
+      // Emit the LangFlow API response back to the client
+      socket.emit("receiveMessage", response.data);
     } catch (error) {
-      console.error("Error running flow:", error);
-      socket.emit("chat-response", { error: error.message });
+      console.error("Error calling LangFlow API:", error);
+      socket.emit("error", {
+        message: "Failed to get a response from LangFlow API.",
+        details: error.message,
+      });
     }
   });
 
+  // Handle socket disconnection
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    console.log("A user disconnected:", socket.id);
   });
 });
 
-// Start server
+// Start the server
+const PORT = 3000 || process.env.PORT;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
