@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
-  FiBarChart,
-  FiChevronDown,
+import {    
   FiChevronsRight,
-  FiDollarSign,
-  FiHome,
-  FiMonitor,
-  FiShoppingCart,
-  FiTag,
-  FiUsers,
   FiGithub,
   FiYoutube
 } from "react-icons/fi";
