@@ -137,7 +137,7 @@ const ToggleClose = ({ open, setOpen }) => {
       onClick={() => setOpen((pv) => !pv)}
       className="absolute bottom-0 left-0 right-0 border-t border-slate-300 transition-colors hover:bg-gray-400"
     >
-      <div className="flex items-center p-2">
+      <div className="flex items-center p-5">
         <motion.div
           layout
           className="grid size-10 place-content-center text-lg"
