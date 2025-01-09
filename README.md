@@ -6,11 +6,11 @@ The Social Media Analysis project is designed to extract, analyze, and visualize
 
 Features
 
-## Data Extraction: Retrieve data from social media platforms via APIs.
+Data Extraction: Retrieve data from social media platforms via APIs.
 
-## Sentiment Analysis: Analyze the sentiment of posts, comments, and messages.
+Sentiment Analysis: Analyze the sentiment of posts, comments, and messages.
 
-## Engagement Metrics: Track likes, shares, comments, and followers.
+Engagement Metrics: Track likes, shares, comments, and followers.
 
 Tech Stack
 
