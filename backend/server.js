@@ -10,7 +10,9 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST"],
   },
+  transports: ["websocket", "polling"],
 });
 
 const LANGFLOW_API_URL = process.env.LANGFLOW_API_URL;
